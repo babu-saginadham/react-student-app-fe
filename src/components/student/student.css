@@ -1,0 +1,19 @@
+button {
+    background-color: green;
+    font-size: 15px;
+}
+
+.count{
+    button {
+        font-size: 70px;
+    }
+}
+
+button.reset {
+    background-color: red;
+    font-size: 50px;
+}
+
+.results {
+    font-size: 80px;
+}

@@ -1,0 +1,210 @@
+import React, { Component } from "react"
+
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+
+
+import "./student.css"
+
+
+class StudentApp extends Component{
+    render() {
+        return (
+            <div className="StudentApp">
+                {/*
+                <LoginComponent></LoginComponent>
+                <WelcomeComponent></WelcomeComponent>
+                */}
+                
+                <Router>
+                <>
+                    <HeaderComponent/>
+                    <Switch>
+                        <Route path = "/" exact component={LoginComponent}/>
+                        <Route path = "/login" component={LoginComponent}/>
+                        <Route path = "/welcome/:name" component={WelcomeComponent}/>
+                        <Route path="/student" component = {ListStudents}></Route>
+                        <Route path="/logout" component = {LogoutComponent}></Route>
+                        <Route path="" component = {ErrorComponent}></Route>
+                    </Switch>
+                    <FooterComponent/>
+                </>
+                </Router>
+            </div>
+        )
+    }
+}
+
+class ListStudents extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            //student: {id: 1, name:'Babu'}
+            students : 
+            [
+                {id: 1, name:'Babu'},
+                {id: 2, name:'ABC'},
+                {id: 3, name:'XYZ'}
+            ]
+
+        }
+    }
+
+    render() {
+        return ( 
+        <div>
+            <h1>Students List</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* 
+                    <tr>
+                        <td>{this.state.student.id}</td>
+                        <td>{this.state.student.name}</td>
+                    </tr>
+                    */}
+
+                    {
+                        this.state.students.map (
+                            student =>
+                            <tr>
+                                <td>{student.id}</td>
+                                <td>{student.name}</td>
+                            </tr>
+                        )
+                    }
+                </tbody>
+
+            </table>
+        </div>
+        )
+    }
+}
+
+class HeaderComponent extends Component{
+    render() {
+        return(
+            <header>
+              <nav className="navbar navbar-expand-md navbar-dark bg-dark">
+                    <ul className="navbar-nav">
+                        <li className="nav-link"><Link className="nav-link" to="/welcome/admin">Home</Link></li>
+                        <li className="nav-link"><Link className="nav-link" to="/student">Student Data Management</Link></li>
+                    </ul>
+                    <ul className="navbar-nav navbar-collapse justify-content-end">
+                        <li className="nav-link"><Link className="nav-link" to="/login">Login</Link></li>
+                        <li className="nav-link"><Link className="nav-link" to="/logout">Logout</Link></li>
+                    </ul>
+                </nav>
+            </header>
+        )
+    }
+}
+
+class FooterComponent extends Component{
+    render() {
+        return(
+            <footer className="footer">
+                <span className="text-muted">All rights reserved</span>
+            </footer>
+        )
+    }
+}
+
+class LogoutComponent extends Component{
+    render() {
+        return(
+            <>
+                <h1>You are logged out</h1>
+                <div className="container">
+                    Thank you for Using Application
+                </div>
+            </>
+        )
+    }
+}
+
+class WelcomeComponent extends Component {
+    render() {
+        //return <div>Welcome User {this.props.match.params.name}</div>
+        return <div>Welcome User {this.props.match.params.name}. You can manage students data <a href="/student"> here </a> </div>
+    }
+}
+
+class LoginComponent extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            userName : '',
+            password : '',
+            loginSuccess : false,
+            showMessage : false
+        }
+
+        this.handleChange = this.handleChange.bind(this)
+        this.loginClicked = this.loginClicked.bind(this)
+    }
+
+    handleChange(event) {
+        console.log(event.target.value)
+        this.setState(
+            {
+                [event.target.name] : event.target.value
+            }
+        )
+    }
+
+    loginClicked() {
+        console.log(this.state)
+        if(this.state.userName==='admin' && this.state.password==='admin') {
+            this.props.history.push(`/welcome/${this.state.userName}`)
+            console.log('success')
+            this.setState( {
+                showMessage : true,
+                loginSuccess : true
+            })
+        }else {
+            console.log('Falied')
+            this.setState( {
+                showMessage : false,
+                loginSuccess : false
+            })
+        }
+    }
+
+    render() {
+        return(
+            <div>
+                
+                User Name: <input type="text" name="userName" value={this.state.userName} onChange={this.handleChange}></input> <br/>
+                Password: <input type="password" name="password" value={this.state.password} onChange={this.handleChange}></input><br/>
+                <button onClick={this.loginClicked}>Login</button>
+                <br></br>
+                {this.state.showMessage ? (this.state.loginSuccess ? <div> Login Success </div>  : <div> Login Failed </div>) : 'Enter Credentials'}
+                
+            </div>
+        )
+    } 
+    
+}
+
+
+
+function ErrorComponent() {
+    return <div>Invalid URL, Pls check the URL</div>
+}
+
+function ShowMessage(props) {
+    console.log('showMessage')
+    console.log(props)
+    if(!props.loginSuccess) {
+        return <div>Login Failed</div>
+    }
+    return null
+}
+
+export default StudentApp 

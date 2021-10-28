@@ -1,0 +1,60 @@
+   {/*
+    handleUserNameChange(event) {
+        console.log(event.target.value)
+        this.setState(
+            {
+                userName : event.target.value
+            }
+        )
+    }
+
+    handlePasswordChange(event) {
+        console.log(event.target.value)
+        this.setState(
+            {
+                password : event.target.value
+            }
+        )
+    }
+*/}
+
+
+        this.handleUserNameChange = this.handleUserNameChange.bind(this)
+        this.handlePasswordChange = this.handlePasswordChange.bind(this)
+
+User Name: <input type="text" name="userName" value={this.state.userName} onChange={this.handleUserNameChange}></input> <br/>
+                Password: <input type="password" name="password" value={this.state.password} onChange={this.handlePasswordChange}></input><br/>
+
+
+
+2
+=======
+render() {
+        return(
+            <div>
+                
+                User Name: <input type="text" name="userName" value={this.state.userName} onChange={this.handleChange}></input> <br/>
+                Password: <input type="password" name="password" value={this.state.password} onChange={this.handleChange}></input><br/>
+                <button onClick={this.loginClicked}>Login</button>
+                <ShowMessage loginSuccess={{this.state.loginSuccess}, {this.state.showMessage}}/>
+            </div>
+        )
+    } 
+    
+}
+
+function ShowMessage(props) {
+    console.log('showMessage')
+    console.log(props)
+    if(!props.loginSuccess) {
+        return <div>Login Failed</div>
+    }
+    return null
+}
+
+export default StudentApp 
+
+
+
+{this.state.loginSuccess && this.state.showMessage && <div> Login Success </div>}
+                {!this.state.loginSuccess && this.state.showMessage && <div> Login Failed </div>}
